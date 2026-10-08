@@ -1,0 +1,2 @@
+Coloque aqui as fotos (hero.jpg, simples.jpg, duplo.jpg, suite.jpg, luxo.jpg).
+Depois informe os caminhos em src/config/images.js, por exemplo: hero: '/img/hero.jpg'.

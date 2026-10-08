@@ -1,0 +1,77 @@
+/* Variáveis de cor (claro e escuro), tipografia e reset */
+:root {
+  --bg: #fff;
+  --alt: #f3f1ec;
+  --card: #fff;
+  --ink: #1f2a30;
+  --mut: #62707a;
+  --line: #dcd8cf;
+  --sea: #0f3d4c;
+  --lnk: #0f3d4c;
+  --soft: #e9eef0;
+  --on: #fff;
+  --brass: #c8962e;
+  --navy: #0f3d4c;
+  --ok: #2f7d4f;
+  --bad: #b3402f;
+  box-sizing: border-box;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #0e1a1f;
+    --alt: #13232a;
+    --card: #172a32;
+    --ink: #e6edf0;
+    --mut: #9db0b8;
+    --line: #2b434d;
+    --sea: #8ec5d4;
+    --lnk: #8ec5d4;
+    --soft: #1d343d;
+    --on: #0e1a1f;
+    --ok: #7fc79a;
+    --bad: #e08a78;
+  }
+}
+:root[data-theme='dark'] {
+  --bg: #0e1a1f;
+  --alt: #13232a;
+  --card: #172a32;
+  --ink: #e6edf0;
+  --mut: #9db0b8;
+  --line: #2b434d;
+  --sea: #8ec5d4;
+  --lnk: #8ec5d4;
+  --soft: #1d343d;
+  --on: #0e1a1f;
+  --ok: #7fc79a;
+  --bad: #e08a78;
+}
+html {
+  scroll-padding-top: calc(76px + env(safe-area-inset-top, 0px));
+}
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font:
+    16px/1.6 'Nunito Sans',
+    system-ui,
+    sans-serif;
+}
+h1,
+h2,
+h3 {
+  font-family: 'Jost', system-ui, sans-serif;
+  font-weight: 500;
+  margin: 0;
+  line-height: 1.15;
+}

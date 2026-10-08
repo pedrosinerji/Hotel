@@ -1,0 +1,103 @@
+/* Cartões de quarto, plantas e mapa de ocupação */
+.rooms {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+  gap: 16px;
+  margin: 14px 0;
+}
+.rc {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 10px;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+.rc.sel {
+  border: 2px solid var(--brass);
+  padding: 9px;
+}
+.rc.off {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.rc b {
+  display: block;
+  margin-top: 6px;
+}
+.rc small {
+  display: block;
+  color: var(--mut);
+}
+.gr {
+  display: grid;
+  align-items: stretch;
+  border-bottom: 1px solid var(--line);
+}
+.gr b {
+  padding: 7px 4px;
+  font-size: 13px;
+}
+.gr small {
+  text-align: center;
+  color: var(--mut);
+  font-size: 11px;
+  padding: 4px 0;
+}
+.gr small.tdy {
+  color: var(--ink);
+  font-weight: 700;
+}
+.gr i {
+  border-left: 1px solid var(--line);
+}
+.gr em {
+  font-style: normal;
+  margin: 4px 2px;
+  border-radius: 3px;
+  padding: 3px 7px;
+  font-size: 12px;
+  color: #fff;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  z-index: 1;
+}
+.b-CONFIRMADA {
+  background: #8a5a14;
+}
+.b-PENDENTE {
+  background: #c9a24a;
+  color: #1d2822 !important;
+}
+.b-EM_ANDAMENTO {
+  background: #a8402e;
+}
+.b-FINALIZADA {
+  background: #8a9188;
+}
+.hi {
+  outline: 3px solid var(--ink);
+  outline-offset: 1px;
+}
+.lg {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: var(--mut);
+  margin: 10px 0;
+}
+.lg span:before {
+  content: '';
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+  background: var(--c);
+  margin-right: 6px;
+}
