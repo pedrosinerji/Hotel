@@ -1,0 +1,12 @@
+/* Ajustes para telas pequenas */
+@media (max-width: 760px) {
+  .split {
+    grid-template-columns: 1fr;
+  }
+  .hero {
+    min-height: 520px;
+  }
+  .tt {
+    font-size: 29px;
+  }
+}

@@ -1,0 +1,308 @@
+/* Site público: topo, faixa principal, busca, acomodações, comodidades e rodapé */
+.site-h {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+  padding-top: env(safe-area-inset-top, 0px);
+}
+.in {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 12px 22px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.logo {
+  font:
+    500 24px 'Jost',
+    sans-serif;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+}
+.logo b {
+  color: var(--brass);
+  font-weight: 500;
+}
+.mn {
+  margin-left: auto;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.lk {
+  background: none;
+  border: 0;
+  font:
+    500 14px 'Jost',
+    sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  padding: 8px 12px;
+  cursor: pointer;
+}
+.lk:hover {
+  color: var(--brass);
+}
+
+/* ===== Faixa principal ===== */
+.hero {
+  position: relative;
+  aspect-ratio: 3 / 1;
+  min-height: 440px;
+  max-height: 700px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: var(--navy);
+}
+.hero .bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.hero:after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(6, 28, 36, 0.82), rgba(6, 28, 36, 0.1) 75%);
+}
+.hero .in {
+  position: relative;
+  z-index: 2;
+  display: block;
+  max-width: none;
+  margin: 0;
+  padding: 70px 48px;
+  width: 100%;
+}
+
+/* Quando existe foto: a faixa assume a altura da própria foto */
+.hero.hero-foto {
+  display: block;
+  min-height: 0;
+  aspect-ratio: auto;
+  max-height: none;
+}
+.hero.hero-foto img.bg {
+  position: static;
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.hero.hero-foto .in {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start; /* texto encostado à esquerda */
+  text-align: left;
+  padding: 0 48px; /* distância da borda esquerda */
+}
+
+.hero h1 {
+  font-size: clamp(36px, 5.4vw, 60px);
+  max-width: 14ch;
+  margin-bottom: 16px;
+}
+.hero p {
+  max-width: 44ch;
+  font-size: 19px;
+  margin: 0;
+}
+
+/* ===== Barra de busca (centralizada, entra um pouco na foto) ===== */
+.bar {
+  position: relative;
+  z-index: 3;
+  max-width: 1100px;
+  width: calc(100% - 44px);
+  margin: -32px auto 0; /* quanto mais negativo, mais sobe sobre a foto */
+  background: var(--card);
+  border-radius: 6px;
+  padding: 18px 20px;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.2);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 14px;
+  align-items: end;
+}
+
+/* ===== Selos, seções e cartões ===== */
+.badges {
+  max-width: 1180px;
+  margin: 34px auto 0;
+  padding: 0 22px;
+  display: flex;
+  gap: 12px 34px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.badges span {
+  font:
+    500 13px 'Jost',
+    sans-serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mut);
+}
+.badges span:before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--brass);
+  margin-right: 9px;
+}
+.band {
+  background: var(--alt);
+}
+.sec {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 64px 22px;
+}
+.tt {
+  font-size: 36px;
+  text-align: center;
+}
+.sub {
+  text-align: center;
+  max-width: 60ch;
+  margin: 12px auto 36px;
+  color: var(--mut);
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+}
+.rt {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.rt svg {
+  display: block;
+  width: 100%;
+}
+.rt .bd {
+  padding: 18px 18px 22px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+.rt h3 {
+  font-size: 23px;
+}
+.rt p {
+  color: var(--mut);
+  margin: 6px 0;
+  font-size: 15px;
+}
+.rt .pr {
+  margin: 10px 0 16px;
+  color: var(--mut);
+}
+.rt .pr b {
+  font:
+    500 32px 'Jost',
+    sans-serif;
+  color: var(--ink);
+}
+.rt .btn {
+  margin-top: auto;
+}
+
+/* ===== Comodidades ===== */
+.am {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 30px 20px;
+  text-align: center;
+}
+.am svg {
+  width: 40px;
+  height: 40px;
+  stroke: var(--brass);
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.am div {
+  font:
+    500 14px 'Jost',
+    sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 10px;
+}
+
+/* ===== Rodapé ===== */
+.ft {
+  background: var(--navy);
+  color: #cfe0e5;
+  padding: 40px 22px;
+  font-size: 14px;
+}
+.ft .in {
+  padding: 0;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.ft h3 {
+  color: #fff;
+  font-size: 20px;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.ft p {
+  margin: 2px 0;
+}
+.fl {
+  background: none;
+  border: 1px solid #cfe0e5;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font: inherit;
+  cursor: pointer;
+}
+.fl:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* ===== Celular ===== */
+@media (max-width: 760px) {
+  .hero .in {
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+  .hero.hero-foto .in {
+    position: relative;
+    background: var(--navy);
+    padding: 24px 22px;
+  }
+  .bar {
+    margin-top: 20px;
+  }
+}
