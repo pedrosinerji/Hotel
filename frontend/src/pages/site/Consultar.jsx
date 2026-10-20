@@ -2,18 +2,24 @@
 import { useState } from 'react'
 import { RoomSVG } from '../../components/rooms/RoomPlan.jsx'
 import { STT, esOf } from '../../domain/reservas.js'
+import { api } from '../../services/api.js'
 import { money, dig } from '../../utils/format.js'
 
-export function Consultar({ d }) {
+export function Consultar() {
   const [p, setP] = useState('')
   const [doc, setDoc] = useState('')
   const [res, setRes] = useState(undefined)
-  const busca = () => {
-    const r = d.reservas.find((x) => x.id === +p),
-      c = r && d.clientes.find((x) => x.id === r.id_cliente)
-    setRes(r && c && c.doc === dig(doc) ? { r, c } : null)
+  const [erro, setErro] = useState('')
+  const busca = async () => {
+    try {
+      setRes(await api.consultar({ protocolo: Number(p), doc: dig(doc) }))
+      setErro('')
+    } catch (e) {
+      setRes(null)
+      setErro(e.message)
+    }
   }
-  const q = res && d.quartos.find((x) => x.id === res.r.id_quarto)
+  const q = res && res.q
   return (
     <div>
       <h2>Consultar reserva</h2>
@@ -32,7 +38,7 @@ export function Consultar({ d }) {
           Consultar
         </button>
       </div>
-      {res === null && <div className="err">Nenhuma reserva encontrada com esses dados.</div>}
+      {res === null && <div className="err">{erro || 'Nenhuma reserva encontrada com esses dados.'}</div>}
       {res && (
         <div className="split">
           <div className="card">

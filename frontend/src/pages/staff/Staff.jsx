@@ -2,13 +2,13 @@
 import { useState } from 'react'
 import { Gantt } from '../../components/rooms/Gantt.jsx'
 import { RoomSVG } from '../../components/rooms/RoomPlan.jsx'
-import { mudaQuarto } from '../../domain/quartos.js'
 import { esOf, ocupado } from '../../domain/reservas.js'
 import { Audit } from './Audit.jsx'
-import { aud } from '../../services/auditoria.js'
+import { AdminData } from './AdminData.jsx'
+import { api } from '../../services/api.js'
 import { money, days, today, fmt } from '../../utils/format.js'
 
-export function Staff({ d, setD, me, out }) {
+export function Staff({ d, onChange, me }) {
   const [tab, setTab] = useState('conf')
   const [fl, setFl] = useState('PENDENTE')
   const [sel, setSel] = useState(null)
@@ -42,22 +42,13 @@ export function Staff({ d, setD, me, out }) {
   const ok = chk.every((x) => x[1])
   const act = async (novo) => {
     if (novo === 'CANCELADA' && !mot.trim()) return alert('Informe o motivo.')
-    let nd = { ...d, reservas: d.reservas.map((x) => (x.id === r.id ? { ...x, status: novo } : x)) }
-    if (novo === 'EM_ANDAMENTO')
-      nd = mudaQuarto(nd, r.id_quarto, 'OCUPADO', 'Check-in da reserva #' + r.id)
-    if (novo === 'FINALIZADA')
-      nd = mudaQuarto(nd, r.id_quarto, 'LIMPEZA', 'Check-out da reserva #' + r.id)
-    setD(
-      await aud(
-        nd,
-        me,
-        'STATUS_RESERVA',
-        'reservas',
-        '#' + r.id,
-        `status: ${r.status} → ${novo}` + (mot ? ` (motivo: ${mot})` : ''),
-      ),
-    )
-    setMot('')
+    try {
+      await api.mudarStatus(r.id, novo, mot)
+      setMot('')
+      await onChange()
+    } catch (e) {
+      alert(e.message)
+    }
   }
   const B = (t, novo, cls = 'btn', dis) => (
     <button className={cls} disabled={dis} onClick={() => act(novo)}>
@@ -70,14 +61,21 @@ export function Staff({ d, setD, me, out }) {
         {[
           ['conf', 'Conferência de reservas'],
           ['mapa', 'Mapa de ocupação'],
-          ...(G ? [['aud', 'Trilha de auditoria']] : []),
+          ...(G
+            ? [
+                ['admin', 'Cadastros e relatórios'],
+                ['aud', 'Trilha de auditoria'],
+              ]
+            : []),
         ].map(([k, l]) => (
           <button key={k} className={tab === k ? 'on' : ''} onClick={() => setTab(k)}>
             {l}
           </button>
         ))}
       </div>
-      {tab === 'aud' ? (
+      {tab === 'admin' ? (
+        <AdminData />
+      ) : tab === 'aud' ? (
         <Audit d={d} />
       ) : tab === 'mapa' ? (
         <div>
