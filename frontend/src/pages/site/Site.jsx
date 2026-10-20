@@ -8,7 +8,7 @@ import { Consultar } from './Consultar.jsx'
 import { Reservar } from './Reservar.jsx'
 import { money, today, addD } from '../../utils/format.js'
 
-export function Site({ d, setD, onStaff }) {
+export function Site({ d, onChange, onStaff }) {
   const [f, setF] = useState({ ci: addD(today, 1), co: addD(today, 3), tipo: '', q: '' })
   const [pg, setPg] = useState('home')
   const go = (id) => {
@@ -78,7 +78,7 @@ export function Site({ d, setD, onStaff }) {
       </header>
       {pg === 'con' ? (
         <div className="sec" style={{ minHeight: '60vh' }}>
-          <Consultar d={d} />
+          <Consultar />
         </div>
       ) : (
         <>
@@ -192,7 +192,7 @@ export function Site({ d, setD, onStaff }) {
                 Escolha o quarto, informe seus dados e pronto: um funcionário confere e confirma o
                 seu pedido.
               </p>
-              <Reservar d={d} setD={setD} f={f} setF={setF} />
+              <Reservar d={d} onChange={onChange} f={f} setF={setF} />
             </div>
           </section>
         </>

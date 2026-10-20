@@ -1,12 +1,11 @@
 // Fluxo de reserva do hóspede (busca de quartos, dados e confirmação).
 import { useState } from 'react'
 import { RoomSVG } from '../../components/rooms/RoomPlan.jsx'
-import { GUEST } from '../../data/seed.js'
 import { ocupado } from '../../domain/reservas.js'
-import { aud } from '../../services/auditoria.js'
-import { money, days, today, fmt, dig } from '../../utils/format.js'
+import { api } from '../../services/api.js'
+import { money, days, today, fmt } from '../../utils/format.js'
 
-export function Reservar({ d, setD, f, setF }) {
+export function Reservar({ d, onChange, f, setF }) {
   const [c, setC] = useState({ tipo: 'PF', nome: '', doc: '', email: '', tel: '' })
   const [err, setErr] = useState('')
   const [done, setDone] = useState(null)
@@ -21,48 +20,24 @@ export function Reservar({ d, setD, f, setF }) {
   const sel = d.quartos.find((q) => q.id === +f.q),
     total = sel ? n * sel.preco_diaria : 0
   const go = async () => {
-    const doc = dig(c.doc)
-    if (!valid) return setErr('O check-out deve ser depois do check-in.')
-    if (f.ci <= today && f.ci < today) return setErr('O check-in não pode ser no passado.')
     if (!sel) return setErr('Escolha um quarto.')
-    if (why(sel)) return setErr(why(sel) + '.')
-    if (!c.nome.trim()) return setErr('Informe seu nome.')
-    if (doc.length !== (c.tipo === 'PF' ? 11 : 14))
-      return setErr(c.tipo === 'PF' ? 'O CPF deve ter 11 dígitos.' : 'O CNPJ deve ter 14 dígitos.')
-    if (c.email && d.clientes.some((x) => x.email === c.email && x.doc !== doc))
-      return setErr('Este e-mail já pertence a outro cadastro.')
-    const ex = d.clientes.find((x) => x.doc === doc)
-    const cli = ex || {
-      id: 1 + Math.max(0, ...d.clientes.map((x) => x.id)),
-      nome: c.nome.trim(),
-      email: c.email,
-      telefone: c.tel,
-      tipo: c.tipo,
-      doc,
-      data_cadastro: today,
+    try {
+      const res = await api.reservar({
+        tipo: c.tipo,
+        nome: c.nome,
+        doc: c.doc,
+        email: c.email,
+        telefone: c.tel,
+        id_quarto: sel.id,
+        checkin: f.ci,
+        checkout: f.co,
+      })
+      setDone(res)
+      setErr('')
+      onChange()
+    } catch (e) {
+      setErr(e.message)
     }
-    const r = {
-      id: 1 + Math.max(0, ...d.reservas.map((x) => x.id)),
-      id_cliente: cli.id,
-      id_quarto: sel.id,
-      data_checkin: f.ci,
-      data_checkout: f.co,
-      status: 'PENDENTE',
-      valor_total: total,
-    }
-    const nd = await aud(
-      { ...d, clientes: ex ? d.clientes : [...d.clientes, cli], reservas: [...d.reservas, r] },
-      GUEST,
-      'INCLUIR',
-      'reservas',
-      '#' + r.id,
-      Object.entries(r)
-        .map(([k, v]) => k + '=' + v)
-        .join(', ') + (ex ? '' : '; novo cliente #' + cli.id),
-    )
-    setD(nd)
-    setDone({ r, cli, novo: !ex })
-    setErr('')
   }
   if (done) {
     const { r, cli, novo } = done,

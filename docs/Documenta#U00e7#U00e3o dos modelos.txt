@@ -1,0 +1,63 @@
+DOCUMENTAÇÃO COMPLETA E JUSTIFICATIVA DE MODELAGEM - SISTEMA HOTEL
+
+ATENDIMENTO AOS REQUISITOS TÉCNICOS
+
+8 Entidades Principais: CLIENTE, QUARTO, RESERVA, FUNCIONARIO, SERVICO,
+FORNECEDOR, PRODUTO, MANUTENCAO.
+
+Relacionamentos N:N com Atributos Próprios:
+reserva_servico (Reserva x Servico): quantidade, data_hora_solicitacao 
+item_manutencao (Manutencao x Produto): quantidade, custo
+
+Autorrelacionamento: FUNCIONARIO supervisiona FUNCIONARIO (id_supervisor FK).
+
+Generalização/Especialização: CLIENTE especializado em PESSOA_FISICA e PESSOA_JURIDICA.
+
+Entidade Fraca: DEPENDENTE (depende de CLIENTE, com chave composta idCLIENTE + num_sequencial).
+
+Atributo Temporal: HISTORICO_STATUS_QUARTO (rastreia status_anterior, novo_status, data_hora_inicio, data_hora_fim, motivo_alteracao).
+
+JUSTIFICATIVA DE MODELAGEM E TRATAMENTO DA HIERARQUIA / RELACIONAMENTOS
+
+Mapeamento de Especialização (Herança de Cliente):
+Estratégia: Tabela por Subclasse (Com JOIN).
+
+Tabela Base: CLIENTE (id_cliente, nome, email).
+
+Subclasses: PESSOA_FISICA (cpf, rg) e PESSOA_JURIDICA (cnpj, razao_social),
+ambas com PK/FK id_cliente.
+
+Justificativa: Elimina valores nulos (NULL) para documentos fiscais e garante rigor de integridade de dados. A tabela RESERVA aponta diretamente para a tabela generica CLIENTE (idCLIENTE FK), permitindo vinculação universal.
+
+Tratamento de Relacionamentos 1:1 e 1:N:
+
+CLIENTE e CLIENTE_TELEFONE: Mantido desmembrado para atender a 1FN, permitindo múltiplos números por cliente sem repetição de atributos.
+
+MANUTENCAO: Centraliza os dados da ordem de serviço (data, descrição, quarto, funcionário) e conecta-se aos suprimentos consumidos via item_manutencao.
+
+ANÁLISE DE DEPENDÊNCIAS FUNCIONAIS (DFs) E NORMALIZAÇÃO
+
+Todas as relações do esquema estão na Forma Normal de Boyce-Codd (FNBC) e, consequentemente, em todas as outras formas normais:
+
+CLIENTE: id_cliente -> nome, email [Determinante é Chave] (FNBC)
+
+CLIENTE_TELEFONE: (id_telefone, id_cliente) -> telefone [Determinante é Chave] (FNBC)
+
+PESSOA_FISICA: id_cliente -> cpf, rg [Determinante é Chave] (FNBC)
+
+PESSOA_JURIDICA: id_cliente -> cnpj, razao_social [Determinante é Chave] (FNBC)
+
+DEPENDENTE: (num_sequencial, idCLIENTE) -> nome [Determinante é Chave] (FNBC)
+
+QUARTO: id_quarto -> numero, tipo, preco_diaria [Determinante é Chave] (FNBC)
+
+HISTORICO_STATUS_QUARTO: id_historico -> id_quarto, status_anterior, novo_status,
+data_hora_inicio, data_hora_fim, motivo_alteracao [Determinante é Chave] (FNBC)
+
+RESERVA: id_reserva -> idCLIENTE, idQUARTO, data_checkin, data_checkout, status [Determinante é Chave] (FNBC)
+
+ALTERAÇÕES REALIZADAS PARA ATINGIR AS FNs
+
+Os telefones (atributo multivalorado) foram retirados do corpo da entidade CLIENTE e colocados numa tabela dependente CLIENTE_TELEFONE (ID_Cliente, Telefone). (1FN)
+
+Cálculo de Totais: O atributo Valor_Total em RESERVA e o subtotal em RESERVA_SERVICO são derivados da soma das diárias e serviços. Portando são removidos para evitar inconsistências. (3FN)
